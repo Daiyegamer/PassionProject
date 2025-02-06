@@ -5,7 +5,7 @@ using AdilBooks.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace AdilBooks.Controllers
 {
     [Route("api/[controller]")]
@@ -25,17 +25,23 @@ namespace AdilBooks.Controllers
         /// </summary>
         /// <returns>A list of authors.</returns>
         [HttpGet("List")]
-        public async Task<ActionResult<IEnumerable<AuthorListDto>>> ListAuthors()
+        public async Task<ActionResult> ListAuthors()
         {
-            var authors = await _context.Authors.ToListAsync();
-
-            var authorDtos = authors.Select(author => new AuthorListDto
+            try
             {
-                AuthorId = author.AuthorId,
-                Name = author.Name
-            }).ToList();
+                var authors = await _context.Authors.ToListAsync();
+                var authorDtos = authors.Select(author => new AuthorListDto
+                {
+                    AuthorId = author.AuthorId,
+                    Name = author.Name
+                }).ToList();
 
-            return Ok(authorDtos);
+                return Ok(new { message = "Authors retrieved successfully.", data = authorDtos });
+            }
+            catch
+            {
+                return StatusCode(500, "An error occurred while retrieving authors.");
+            }
         }
 
         // GET: api/Authors/Find/{id}
@@ -45,26 +51,30 @@ namespace AdilBooks.Controllers
         /// <param name="id">The ID of the author to retrieve.</param>
         /// <returns>Details of the specified author.</returns>
         [HttpGet("Find/{id}")]
-        public async Task<ActionResult<AuthorDto>> FindAuthor(int id)
+        public async Task<ActionResult> FindAuthor(int id)
         {
-            var author = await _context.Authors
-                .Include(a => a.Books)
-                .FirstOrDefaultAsync(a => a.AuthorId == id);
-
-            if (author == null)
+            try
             {
-                return NotFound("Author not found.");
+                var author = await _context.Authors
+                    .Include(a => a.Books)
+                    .FirstOrDefaultAsync(a => a.AuthorId == id);
+
+                if (author == null) return NotFound(new { message = "Author not found." });
+
+                var authorDto = new AuthorDto
+                {
+                    AuthorId = author.AuthorId,
+                    Name = author.Name,
+                    Bio = author.Bio,
+                    Titles = string.Join(", ", author.Books.Select(b => b.Title))
+                };
+
+                return Ok(new { message = "Author retrieved successfully.", data = authorDto });
             }
-
-            var authorDto = new AuthorDto
+            catch
             {
-                AuthorId = author.AuthorId,
-                Name = author.Name,
-                Bio = author.Bio,
-                Titles = string.Join(", ", author.Books.Select(b => b.Title))
-            };
-
-            return Ok(authorDto);
+                return StatusCode(500, "An error occurred while retrieving the author.");
+            }
         }
 
         // POST: api/Authors/Add
@@ -74,20 +84,26 @@ namespace AdilBooks.Controllers
         /// <param name="authorDto">The details of the author to add.</param>
         /// <returns>The newly added author.</returns>
         [HttpPost("Add")]
-        public async Task<ActionResult<AuthorDto>> AddAuthor(AuthorDto authorDto)
+        public async Task<ActionResult> AddAuthor(AuthorDto authorDto)
         {
-            var author = new Author
+            try
             {
-                Name = authorDto.Name,
-                Bio = authorDto.Bio,
-            };
+                var author = new Author
+                {
+                    Name = authorDto.Name,
+                    Bio = authorDto.Bio,
+                };
 
-            _context.Authors.Add(author);
-            await _context.SaveChangesAsync();
+                _context.Authors.Add(author);
+                await _context.SaveChangesAsync();
 
-            // Return the created author with their ID
-            authorDto.AuthorId = author.AuthorId;
-            return CreatedAtAction(nameof(FindAuthor), new { id = author.AuthorId }, authorDto);
+                authorDto.AuthorId = author.AuthorId;
+                return CreatedAtAction(nameof(FindAuthor), new { id = author.AuthorId }, new { message = "Author added successfully.", data = authorDto });
+            }
+            catch
+            {
+                return StatusCode(500, "An error occurred while adding the author.");
+            }
         }
 
         // PUT: api/Authors/Update/{id}
@@ -100,39 +116,30 @@ namespace AdilBooks.Controllers
         [HttpPut("Update/{id}")]
         public async Task<IActionResult> UpdateAuthor(int id, AuthorDto authorDto)
         {
-            if (id != authorDto.AuthorId)
-            {
-                return BadRequest("Author ID mismatch.");
-            }
-
-            var author = await _context.Authors.FindAsync(id);
-            if (author == null)
-            {
-                return NotFound("Author not found.");
-            }
-
-            author.Name = authorDto.Name;
-            author.Bio = authorDto.Bio;
-
-            _context.Entry(author).State = EntityState.Modified;
+            if (id != authorDto.AuthorId) return BadRequest(new { message = "Author ID mismatch." });
 
             try
             {
+                var author = await _context.Authors.FindAsync(id);
+                if (author == null) return NotFound(new { message = "Author not found." });
+
+                author.Name = authorDto.Name;
+                author.Bio = authorDto.Bio;
+
+                _context.Entry(author).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Author updated successfully." });
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AuthorExists(id))
-                {
-                    return NotFound("Author not found.");
-                }
-                else
-                {
-                    throw;
-                }
+                if (!AuthorExists(id)) return NotFound(new { message = "Author not found." });
+                throw;
             }
-
-            return NoContent();
+            catch
+            {
+                return StatusCode(500, "An error occurred while updating the author.");
+            }
         }
 
         // DELETE: api/Authors/Delete/{id}
@@ -144,16 +151,53 @@ namespace AdilBooks.Controllers
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteAuthor(int id)
         {
-            var author = await _context.Authors.FindAsync(id);
-            if (author == null)
+            try
             {
-                return NotFound("Author not found.");
+                var author = await _context.Authors.FindAsync(id);
+                if (author == null) return NotFound(new { message = "Author not found." });
+
+                _context.Authors.Remove(author);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Author deleted successfully." });
             }
+            catch
+            {
+                return StatusCode(500, "An error occurred while deleting the author.");
+            }
+        }
 
-            _context.Authors.Remove(author);
-            await _context.SaveChangesAsync();
+        // GET: api/Authors/GetBooks/{id}
+        /// <summary>
+        /// Retrieves all books associated with a specific author.
+        /// </summary>
+        /// <param name="id">The ID of the author whose books are to be retrieved.</param>
+        /// <returns>200 OK with a list of books, or 404 Not Found if the author or books are not found.</returns>
+        [HttpGet("GetBooks/{id}")]
+        public async Task<ActionResult> GetBooksForAuthor(int id)
+        {
+            try
+            {
+                var author = await _context.Authors
+                    .Include(a => a.Books)
+                    .FirstOrDefaultAsync(a => a.AuthorId == id);
 
-            return NoContent();
+                if (author == null) return NotFound(new { message = "Author not found." });
+
+                if (author.Books == null || !author.Books.Any()) return NotFound(new { message = "No books found for this author." });
+
+                var booksDto = author.Books.Select(book => new GetBooksDto
+                {
+                    Title = book.Title,
+                    Year = book.Year
+                }).ToList();
+
+                return Ok(new { message = "Books retrieved successfully.", data = booksDto });
+            }
+            catch
+            {
+                return StatusCode(500, "An error occurred while retrieving books for the author.");
+            }
         }
 
         // Helper method to check if an author exists
@@ -161,44 +205,5 @@ namespace AdilBooks.Controllers
         {
             return _context.Authors.Any(a => a.AuthorId == id);
         }
-        [HttpGet("GetBooks/{id}")]
-        /// <summary>
-        /// Retrieves all books associated with a specific author.
-        /// </summary>
-        /// <remarks>
-        /// This method returns a list of books with only their title and year for the given author.
-        /// </remarks>
-        /// <param name="id">The ID of the author whose books are to be retrieved.</param>
-        /// <returns>200 OK with a list of books, or 404 Not Found if the author or books are not found.</returns>
-        /// <example>
-        /// api/Authors/GetBooksForAuthor/{id} -> Retrieves books with title and year for the given author.
-        /// </example>
-        public async Task<ActionResult<IEnumerable<GetBooksDto>>> GetBooksForAuthor(int id)
-        {
-            // Check if the author exists
-            var author = await _context.Authors
-                .Include(a => a.Books)
-                .FirstOrDefaultAsync(a => a.AuthorId == id);
-
-            if (author == null)
-            {
-                return NotFound("Author not found.");
-            }
-
-            if (author.Books == null || !author.Books.Any())
-            {
-                return NotFound("No books found for this author.");
-            }
-
-            // Map the books to GetBooksDto and return them
-            var booksDto = author.Books.Select(book => new GetBooksDto
-            {
-                Title = book.Title,
-                Year = book.Year
-            }).ToList();
-
-            return Ok(booksDto);
-        }
-
     }
 }

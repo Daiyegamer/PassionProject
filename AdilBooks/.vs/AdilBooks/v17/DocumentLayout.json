@@ -3,8 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|c:\\users\\fahad\\onedrive - humber polytechnic\\desktop\\backend 2\\assignment 2\\passionproject\\adilbooks\\data\\migrations\\20250202002353_addedmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|solutionrelative:data\\migrations\\20250202002353_addedmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|c:\\users\\fahad\\onedrive - humber polytechnic\\desktop\\backend 2\\assignment 2\\passionproject\\adilbooks\\controllers\\bookscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|solutionrelative:controllers\\bookscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|c:\\users\\fahad\\onedrive - humber polytechnic\\desktop\\backend 2\\assignment 2\\passionproject\\adilbooks\\controllers\\authorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|solutionrelative:controllers\\authorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|c:\\users\\fahad\\onedrive - humber polytechnic\\desktop\\backend 2\\assignment 2\\passionproject\\adilbooks\\controllers\\publisherscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|solutionrelative:controllers\\publisherscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|c:\\users\\fahad\\onedrive - humber polytechnic\\desktop\\backend 2\\assignment 2\\passionproject\\adilbooks\\models\\publisher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|solutionrelative:models\\publisher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|c:\\users\\fahad\\onedrive - humber polytechnic\\desktop\\backend 2\\assignment 2\\passionproject\\adilbooks\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -19,20 +31,12 @@
       "RelativeMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|solutionrelative:models\\bookauthor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|c:\\users\\fahad\\onedrive - humber polytechnic\\desktop\\backend 2\\assignment 2\\passionproject\\adilbooks\\models\\publisher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|solutionrelative:models\\publisher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|c:\\users\\fahad\\onedrive - humber polytechnic\\desktop\\backend 2\\assignment 2\\passionproject\\adilbooks\\models\\book.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|solutionrelative:models\\book.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|c:\\users\\fahad\\onedrive - humber polytechnic\\desktop\\backend 2\\assignment 2\\passionproject\\adilbooks\\models\\author.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|solutionrelative:models\\author.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|c:\\users\\fahad\\onedrive - humber polytechnic\\desktop\\backend 2\\assignment 2\\passionproject\\adilbooks\\data\\migrations\\20250202001641_addedentities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B760AE66-ABFC-4511-BFCE-01154E17B77D}|AdilBooks.csproj|solutionrelative:data\\migrations\\20250202001641_addedentities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,24 +46,50 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "20250202002353_addedmodels.cs",
-              "DocumentMoniker": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\Data\\Migrations\\20250202002353_addedmodels.cs",
-              "RelativeDocumentMoniker": "Data\\Migrations\\20250202002353_addedmodels.cs",
-              "ToolTip": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\Data\\Migrations\\20250202002353_addedmodels.cs",
-              "RelativeToolTip": "Data\\Migrations\\20250202002353_addedmodels.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "AuthorsController.cs",
+              "DocumentMoniker": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\Controllers\\AuthorsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AuthorsController.cs",
+              "ToolTip": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\Controllers\\AuthorsController.cs",
+              "RelativeToolTip": "Controllers\\AuthorsController.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAgwGoAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-02T00:23:54.047Z",
+              "WhenOpened": "2025-02-06T17:42:07.423Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
+              "Title": "PublishersController.cs",
+              "DocumentMoniker": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\Controllers\\PublishersController.cs",
+              "RelativeDocumentMoniker": "Controllers\\PublishersController.cs",
+              "ToolTip": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\Controllers\\PublishersController.cs",
+              "RelativeToolTip": "Controllers\\PublishersController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-06T17:27:24.166Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "BooksController.cs",
+              "DocumentMoniker": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\Controllers\\BooksController.cs",
+              "RelativeDocumentMoniker": "Controllers\\BooksController.cs",
+              "ToolTip": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\Controllers\\BooksController.cs",
+              "RelativeToolTip": "Controllers\\BooksController.cs",
+              "ViewState": "AgIAAAgBAAAAAAAAAAAYwCUBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-06T03:59:19.11Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -67,24 +97,11 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAADcAAAAAAAAAAAAkwDEAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-02T00:16:51.83Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-02T00:16:51.83Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "20250202001641_addedentities.cs",
-              "DocumentMoniker": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\Data\\Migrations\\20250202001641_addedentities.cs",
-              "RelativeDocumentMoniker": "Data\\Migrations\\20250202001641_addedentities.cs",
-              "ToolTip": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\Data\\Migrations\\20250202001641_addedentities.cs",
-              "RelativeToolTip": "Data\\Migrations\\20250202001641_addedentities.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-02T00:16:41.247Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
@@ -96,7 +113,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "BookAuthor.cs",
               "DocumentMoniker": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\Models\\BookAuthor.cs",
               "RelativeDocumentMoniker": "Models\\BookAuthor.cs",
@@ -108,19 +125,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "Publisher.cs",
               "DocumentMoniker": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\Models\\Publisher.cs",
               "RelativeDocumentMoniker": "Models\\Publisher.cs",
               "ToolTip": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\Models\\Publisher.cs",
               "RelativeToolTip": "Models\\Publisher.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAATAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-02T00:12:54.019Z"
+              "WhenOpened": "2025-02-02T00:12:54.019Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "Author.cs",
               "DocumentMoniker": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\Models\\Author.cs",
               "RelativeDocumentMoniker": "Models\\Author.cs",
@@ -132,7 +150,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "Book.cs",
               "DocumentMoniker": "C:\\Users\\fahad\\OneDrive - Humber Polytechnic\\Desktop\\Backend 2\\Assignment 2\\PassionProject\\AdilBooks\\Models\\Book.cs",
               "RelativeDocumentMoniker": "Models\\Book.cs",
