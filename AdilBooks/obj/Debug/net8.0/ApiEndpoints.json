@@ -164,6 +164,22 @@
   },
   {
     "ContainingType": "AdilBooks.Controllers.BooksController",
+    "Method": "ListAuthorsByBook",
+    "RelativePath": "api/Books/GetAuthors/{bookId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "bookId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AdilBooks.Controllers.BooksController",
     "Method": "LinkAuthorToBook",
     "RelativePath": "api/Books/LinkAuthorToBook/{AuthorId}/{BookId}",
     "HttpMethod": "POST",

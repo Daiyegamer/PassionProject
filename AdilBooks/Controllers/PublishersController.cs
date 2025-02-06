@@ -22,12 +22,23 @@ namespace AdilBooks.Controllers
         /// <summary>
         /// Retrieves a list of all publishers.
         /// </summary>
-        /// <returns>
-        /// 200 OK with a list of PublisherDto objects.
-        /// [{PublisherDto}, {PublisherDto}, ...]
-        /// </returns>
+        /// <returns>200 OK with a list of PublisherDto objects, or an error message if something goes wrong.</returns>
         /// <example>
-        /// GET: api/Publishers/List -> [{PublisherDto}, {PublisherDto}, ...]
+        /// GET: api/Publishers/List
+        /// Success Example:
+        /// {
+        ///     "message": "Publishers retrieved successfully.",
+        ///     "data": [
+        ///         { "publisherId": 1, "publisherName": "Publisher A", "books": ["Book One", "Book Two"] },
+        ///         { "publisherId": 2, "publisherName": "Publisher B", "books": ["Book Three"] }
+        ///     ]
+        /// }
+        ///
+        /// Error Example:
+        /// {
+        ///     "error": "InternalServerError",
+        ///     "message": "An error occurred while retrieving the publishers."
+        /// }
         /// </example>
         [HttpGet("List")]
         public async Task<ActionResult> ListPublishers()
@@ -49,7 +60,7 @@ namespace AdilBooks.Controllers
             }
             catch
             {
-                return StatusCode(500, "An error occurred while retrieving the publishers.");
+                return StatusCode(500, new { error = "InternalServerError", message = "An error occurred while retrieving the publishers." });
             }
         }
 
@@ -57,12 +68,20 @@ namespace AdilBooks.Controllers
         /// Retrieves details of a specific publisher by ID.
         /// </summary>
         /// <param name="id">The ID of the publisher to retrieve.</param>
-        /// <returns>
-        /// 200 OK with a PublisherDto object, or 404 Not Found if the publisher is not found.
-        /// {PublisherDto}
-        /// </returns>
+        /// <returns>200 OK with a PublisherDto object, or 404 Not Found if the publisher is not found.</returns>
         /// <example>
-        /// GET: api/Publishers/Find/1 -> {PublisherDto}
+        /// GET: api/Publishers/Find/1
+        /// Success Example:
+        /// {
+        ///     "message": "Publisher retrieved successfully.",
+        ///     "data": { "publisherId": 1, "publisherName": "Publisher A", "books": ["Book One", "Book Two"] }
+        /// }
+        ///
+        /// Error Example:
+        /// {
+        ///     "error": "NotFound",
+        ///     "message": "Publisher not found."
+        /// }
         /// </example>
         [HttpGet("Find/{id}")]
         public async Task<ActionResult> FindPublisher(int id)
@@ -73,7 +92,7 @@ namespace AdilBooks.Controllers
                     .Include(p => p.Books)
                     .FirstOrDefaultAsync(p => p.PublisherId == id);
 
-                if (publisher == null) return NotFound(new { message = "Publisher not found." });
+                if (publisher == null) return NotFound(new { error = "NotFound", message = "Publisher not found." });
 
                 var publisherDto = new PublisherDto
                 {
@@ -86,7 +105,7 @@ namespace AdilBooks.Controllers
             }
             catch
             {
-                return StatusCode(500, "An error occurred while retrieving the publisher.");
+                return StatusCode(500, new { error = "InternalServerError", message = "An error occurred while retrieving the publisher." });
             }
         }
 
@@ -94,11 +113,25 @@ namespace AdilBooks.Controllers
         /// Adds a new publisher to the database.
         /// </summary>
         /// <param name="publisherDto">The details of the publisher to add.</param>
-        /// <returns>
-        /// 201 Created with the created PublisherDto object.
-        /// </returns>
+        /// <returns>201 Created with the created PublisherDto object, or an error message if something goes wrong.</returns>
         /// <example>
-        /// POST: api/Publishers/Add -> {PublisherDto}
+        /// POST: api/Publishers/Add
+        /// Input:
+        /// {
+        ///     "publisherName": "New Publisher"
+        /// }
+        ///
+        /// Success Example:
+        /// {
+        ///     "message": "Publisher added successfully.",
+        ///     "data": { "publisherId": 5, "publisherName": "New Publisher", "books": [] }
+        /// }
+        ///
+        /// Error Example:
+        /// {
+        ///     "error": "InternalServerError",
+        ///     "message": "An error occurred while adding the publisher."
+        /// }
         /// </example>
         [HttpPost("Add")]
         public async Task<ActionResult> AddPublisher(PublisherDto publisherDto)
@@ -118,7 +151,7 @@ namespace AdilBooks.Controllers
             }
             catch
             {
-                return StatusCode(500, "An error occurred while adding the publisher.");
+                return StatusCode(500, new { error = "InternalServerError", message = "An error occurred while adding the publisher." });
             }
         }
 
@@ -127,11 +160,25 @@ namespace AdilBooks.Controllers
         /// </summary>
         /// <param name="id">The ID of the publisher to update.</param>
         /// <param name="publisherDto">The updated details of the publisher.</param>
-        /// <returns>
-        /// 200 OK with a success message, or 404 Not Found if the publisher does not exist.
-        /// </returns>
+        /// <returns>200 OK with a success message, or an error message if something goes wrong.</returns>
         /// <example>
-        /// PUT: api/Publishers/Update/1 -> 200 OK
+        /// PUT: api/Publishers/Update/1
+        /// Input:
+        /// {
+        ///     "publisherId": 1,
+        ///     "publisherName": "Updated Publisher Name"
+        /// }
+        ///
+        /// Success Example:
+        /// {
+        ///     "message": "Publisher updated successfully."
+        /// }
+        ///
+        /// Error Example:
+        /// {
+        ///     "error": "NotFound",
+        ///     "message": "Publisher not found."
+        /// }
         /// </example>
         [HttpPut("Update/{id}")]
         public async Task<IActionResult> UpdatePublisher(int id, PublisherDto publisherDto)
@@ -141,7 +188,7 @@ namespace AdilBooks.Controllers
             try
             {
                 var publisher = await _context.Publishers.FindAsync(id);
-                if (publisher == null) return NotFound(new { message = "Publisher not found." });
+                if (publisher == null) return NotFound(new { error = "NotFound", message = "Publisher not found." });
 
                 publisher.PublisherName = publisherDto.PublisherName;
 
@@ -152,12 +199,12 @@ namespace AdilBooks.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PublisherExists(id)) return NotFound(new { message = "Publisher not found." });
+                if (!PublisherExists(id)) return NotFound(new { error = "NotFound", message = "Publisher not found." });
                 throw;
             }
             catch
             {
-                return StatusCode(500, "An error occurred while updating the publisher.");
+                return StatusCode(500, new { error = "InternalServerError", message = "An error occurred while updating the publisher." });
             }
         }
 
@@ -165,11 +212,20 @@ namespace AdilBooks.Controllers
         /// Deletes a specific publisher by their ID.
         /// </summary>
         /// <param name="id">The ID of the publisher to delete.</param>
-        /// <returns>
-        /// 200 OK with a success message, or 404 Not Found if the publisher does not exist.
-        /// </returns>
+        /// <returns>200 OK with a success message, or an error message if something goes wrong.</returns>
         /// <example>
-        /// DELETE: api/Publishers/Delete/1 -> 200 OK
+        /// DELETE: api/Publishers/Delete/1
+        ///
+        /// Success Example:
+        /// {
+        ///     "message": "Publisher deleted successfully."
+        /// }
+        ///
+        /// Error Example:
+        /// {
+        ///     "error": "NotFound",
+        ///     "message": "Publisher not found."
+        /// }
         /// </example>
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeletePublisher(int id)
@@ -177,7 +233,7 @@ namespace AdilBooks.Controllers
             try
             {
                 var publisher = await _context.Publishers.FindAsync(id);
-                if (publisher == null) return NotFound(new { message = "Publisher not found." });
+                if (publisher == null) return NotFound(new { error = "NotFound", message = "Publisher not found." });
 
                 _context.Publishers.Remove(publisher);
                 await _context.SaveChangesAsync();
@@ -186,7 +242,7 @@ namespace AdilBooks.Controllers
             }
             catch
             {
-                return StatusCode(500, "An error occurred while deleting the publisher.");
+                return StatusCode(500, new { error = "InternalServerError", message = "An error occurred while deleting the publisher." });
             }
         }
 
@@ -194,12 +250,23 @@ namespace AdilBooks.Controllers
         /// Retrieves all books associated with a specific publisher.
         /// </summary>
         /// <param name="id">The ID of the publisher whose books are to be retrieved.</param>
-        /// <returns>
-        /// 200 OK with a list of GetBooksDto objects, or 404 Not Found if the publisher or books are not found.
-        /// [{GetBooksDto}, {GetBooksDto}, ...]
-        /// </returns>
+        /// <returns>200 OK with a list of GetBooksDto objects, or an error message if something goes wrong.</returns>
         /// <example>
-        /// GET: api/Publishers/GetBooks/1 -> [{GetBooksDto}, {GetBooksDto}, ...]
+        /// GET: api/Publishers/GetBooks/1
+        /// Success Example:
+        /// {
+        ///     "message": "Books retrieved successfully.",
+        ///     "data": [
+        ///         { "title": "Book One", "year": 2020 },
+        ///         { "title": "Book Two", "year": 2021 }
+        ///     ]
+        /// }
+        ///
+        /// Error Example:
+        /// {
+        ///     "error": "NotFound",
+        ///     "message": "Publisher not found."
+        /// }
         /// </example>
         [HttpGet("GetBooks/{id}")]
         public async Task<ActionResult> GetBooksByPublisher(int id)
@@ -210,9 +277,9 @@ namespace AdilBooks.Controllers
                     .Include(p => p.Books)
                     .FirstOrDefaultAsync(p => p.PublisherId == id);
 
-                if (publisher == null) return NotFound(new { message = "Publisher not found." });
+                if (publisher == null) return NotFound(new { error = "NotFound", message = "Publisher not found." });
 
-                if (publisher.Books == null || !publisher.Books.Any()) return NotFound(new { message = "No books found for this publisher." });
+                if (publisher.Books == null || !publisher.Books.Any()) return NotFound(new { error = "NotFound", message = "No books found for this publisher." });
 
                 var booksDto = publisher.Books.Select(book => new GetBooksDto
                 {
@@ -224,7 +291,7 @@ namespace AdilBooks.Controllers
             }
             catch
             {
-                return StatusCode(500, "An error occurred while retrieving books for the publisher.");
+                return StatusCode(500, new { error = "InternalServerError", message = "An error occurred while retrieving books for the publisher." });
             }
         }
 

@@ -1,6 +1,14 @@
 {
-  "authorId": 0,
-  "name": "John Grisham",
-  "bio": "John Grisham is the author of fifty consecutive #1 bestsellers, which have been translated into nearly fifty languages. His recent books include Camino Ghosts, The Exchange: After the Firm, and his third Jake Brigance novel, A Time for Mercy, which is being developed by HBO as a limited series.\r\n\r\nGrisham is a two-time winner of the Harper Lee Prize for Legal Fiction and was honored with the Library of Congress Creative Achievement Award for Fiction.\r\n\r\nWhen he’s not writing, Grisham serves on the board of directors of the Innocence Project and of Centurion Ministries, two national organizations dedicated to exonerating those who have been wrongfully convicted. Much of his fiction explores deep-seated problems in our criminal justice system.\r\n\r\nJohn lives on a farm in central Virginia.",
-  "titles": "The Firm"
+  "bookId": 3,
+  "title": "SOMETHING GOOD",
+  "year": 2001,
+  "synopsis": "TEst",
+  "publisherId": 2,
+  "authorIds": [
+    1
+  ],
+  "publisherName": "Doubleday",
+  "authorNames": [
+    "Stephen King"
+  ]
 }
