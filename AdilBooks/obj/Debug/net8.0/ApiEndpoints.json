@@ -34,29 +34,13 @@
   {
     "ContainingType": "AdilBooks.Controllers.AuthorsController",
     "Method": "FindAuthor",
-    "RelativePath": "api/Authors/Find/{id}",
+    "RelativePath": "api/Authors/Find/{AuthorId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "AdilBooks.Controllers.AuthorsController",
-    "Method": "GetBooksForAuthor",
-    "RelativePath": "api/Authors/GetBooks/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
+        "Name": "AuthorId",
         "Type": "System.Int32",
         "IsRequired": true
       }
@@ -75,14 +59,30 @@
   },
   {
     "ContainingType": "AdilBooks.Controllers.AuthorsController",
+    "Method": "GetBooksForAuthor",
+    "RelativePath": "api/Authors/ListBooksByAuthor/{AuthorId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "AuthorId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AdilBooks.Controllers.AuthorsController",
     "Method": "UpdateAuthor",
-    "RelativePath": "api/Authors/Update/{id}",
+    "RelativePath": "api/Authors/Update/{AuthorId}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "AuthorId",
         "Type": "System.Int32",
         "IsRequired": true
       },
@@ -122,14 +122,30 @@
   },
   {
     "ContainingType": "AdilBooks.Controllers.BooksController",
+    "Method": "AddMultipleBooks",
+    "RelativePath": "api/Books/AddMultiple",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "books",
+        "Type": "System.Collections.Generic.List\u00601[[AdilBooks.Models.AddBookDto, AdilBooks, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AdilBooks.Controllers.BooksController",
     "Method": "DeleteBook",
-    "RelativePath": "api/Books/Delete/{id}",
+    "RelativePath": "api/Books/Delete/{BookId}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "BookId",
         "Type": "System.Int32",
         "IsRequired": true
       }
@@ -139,13 +155,13 @@
   {
     "ContainingType": "AdilBooks.Controllers.BooksController",
     "Method": "FindBook",
-    "RelativePath": "api/Books/Find/{id}",
+    "RelativePath": "api/Books/Find/{BookId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "BookId",
         "Type": "System.Int32",
         "IsRequired": true
       }
@@ -161,22 +177,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "AdilBooks.Controllers.BooksController",
-    "Method": "ListAuthorsByBook",
-    "RelativePath": "api/Books/GetAuthors/{bookId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "bookId",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "AdilBooks.Controllers.BooksController",
@@ -221,6 +221,22 @@
   },
   {
     "ContainingType": "AdilBooks.Controllers.BooksController",
+    "Method": "ListAuthorsByBook",
+    "RelativePath": "api/Books/ListAuthorsByBook/{bookId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "bookId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AdilBooks.Controllers.BooksController",
     "Method": "UnlinkAuthor",
     "RelativePath": "api/Books/UnlinkAuthor/{AuthorId}/{BookId}",
     "HttpMethod": "DELETE",
@@ -243,13 +259,13 @@
   {
     "ContainingType": "AdilBooks.Controllers.BooksController",
     "Method": "UpdateBook",
-    "RelativePath": "api/Books/Update/{id}",
+    "RelativePath": "api/Books/Update/{BookId}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "BookId",
         "Type": "System.Int32",
         "IsRequired": true
       },
@@ -280,13 +296,13 @@
   {
     "ContainingType": "AdilBooks.Controllers.PublishersController",
     "Method": "DeletePublisher",
-    "RelativePath": "api/Publishers/Delete/{id}",
+    "RelativePath": "api/Publishers/Delete/{PublisherId}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "PublisherId",
         "Type": "System.Int32",
         "IsRequired": true
       }
@@ -296,29 +312,13 @@
   {
     "ContainingType": "AdilBooks.Controllers.PublishersController",
     "Method": "FindPublisher",
-    "RelativePath": "api/Publishers/Find/{id}",
+    "RelativePath": "api/Publishers/Find/{PublisherId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "AdilBooks.Controllers.PublishersController",
-    "Method": "GetBooksByPublisher",
-    "RelativePath": "api/Publishers/GetBooks/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
+        "Name": "PublisherId",
         "Type": "System.Int32",
         "IsRequired": true
       }
@@ -337,14 +337,30 @@
   },
   {
     "ContainingType": "AdilBooks.Controllers.PublishersController",
+    "Method": "GetBooksByPublisher",
+    "RelativePath": "api/Publishers/ListBooksByPublisher/{PublisherId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "PublisherId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AdilBooks.Controllers.PublishersController",
     "Method": "UpdatePublisher",
-    "RelativePath": "api/Publishers/Update/{id}",
+    "RelativePath": "api/Publishers/Update/{PublisherId}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "PublisherId",
         "Type": "System.Int32",
         "IsRequired": true
       },

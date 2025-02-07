@@ -1,9 +1,37 @@
+[{
+  "bookId": 1,
+  "title": "Doctor Sleep",
+  "year": 2013,
+  "synopsis": "A sequel to *The Shining*, following a now-adult Danny Torrance as he battles addiction and encounters a cult that feeds on psychic energy.",
+  "publisherId": 3,
+  "authorIds": [
+    1
+  ],
+  "publisherName": "Scribner",
+  "authorNames": [
+    "Stephen King"
+  ]
+}, 
+{
+  "bookId": 2,
+  "title": "Carrie",
+  "year": 1974,
+  "synopsis": "Stephen King's debut novel about a bullied high school girl who discovers her telekinetic powers and exacts revenge on her tormentors.",
+  "publisherId": 1,
+  "authorIds": [
+    1
+  ],
+  "publisherName": "Doubleday",
+  "authorNames": [
+    "Stephen King"
+  ]
+},
 {
   "bookId": 3,
-  "title": "SOMETHING GOOD",
-  "year": 2001,
-  "synopsis": "TEst",
-  "publisherId": 2,
+  "title": "Pet Sematary",
+  "year": 1983,
+  "synopsis": "A horror novel exploring themes of death and resurrection when a man discovers an ancient burial ground with dark powers.",
+  "publisherId": 1,
   "authorIds": [
     1
   ],
@@ -12,3 +40,5 @@
     "Stephen King"
   ]
 }
+]
+

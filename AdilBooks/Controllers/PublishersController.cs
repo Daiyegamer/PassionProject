@@ -5,7 +5,6 @@ using AdilBooks.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 namespace AdilBooks.Controllers
 {
     [Route("api/[controller]")]
@@ -67,7 +66,7 @@ namespace AdilBooks.Controllers
         /// <summary>
         /// Retrieves details of a specific publisher by ID.
         /// </summary>
-        /// <param name="id">The ID of the publisher to retrieve.</param>
+        /// <param name="PublisherId">The ID of the publisher to retrieve.</param>
         /// <returns>200 OK with a PublisherDto object, or 404 Not Found if the publisher is not found.</returns>
         /// <example>
         /// GET: api/Publishers/Find/1
@@ -83,14 +82,14 @@ namespace AdilBooks.Controllers
         ///     "message": "Publisher not found."
         /// }
         /// </example>
-        [HttpGet("Find/{id}")]
-        public async Task<ActionResult> FindPublisher(int id)
+        [HttpGet("Find/{PublisherId}")]
+        public async Task<ActionResult> FindPublisher(int PublisherId)
         {
             try
             {
                 var publisher = await _context.Publishers
                     .Include(p => p.Books)
-                    .FirstOrDefaultAsync(p => p.PublisherId == id);
+                    .FirstOrDefaultAsync(p => p.PublisherId == PublisherId);
 
                 if (publisher == null) return NotFound(new { error = "NotFound", message = "Publisher not found." });
 
@@ -158,7 +157,7 @@ namespace AdilBooks.Controllers
         /// <summary>
         /// Updates an existing publisher's details.
         /// </summary>
-        /// <param name="id">The ID of the publisher to update.</param>
+        /// <param name="PublisherId">The ID of the publisher to update.</param>
         /// <param name="publisherDto">The updated details of the publisher.</param>
         /// <returns>200 OK with a success message, or an error message if something goes wrong.</returns>
         /// <example>
@@ -180,14 +179,14 @@ namespace AdilBooks.Controllers
         ///     "message": "Publisher not found."
         /// }
         /// </example>
-        [HttpPut("Update/{id}")]
-        public async Task<IActionResult> UpdatePublisher(int id, PublisherDto publisherDto)
+        [HttpPut("Update/{PublisherId}")]
+        public async Task<IActionResult> UpdatePublisher(int PublisherId, PublisherDto publisherDto)
         {
-            if (id != publisherDto.PublisherId) return BadRequest(new { message = "Publisher ID mismatch." });
+            if (PublisherId != publisherDto.PublisherId) return BadRequest(new { message = "Publisher ID mismatch." });
 
             try
             {
-                var publisher = await _context.Publishers.FindAsync(id);
+                var publisher = await _context.Publishers.FindAsync(PublisherId);
                 if (publisher == null) return NotFound(new { error = "NotFound", message = "Publisher not found." });
 
                 publisher.PublisherName = publisherDto.PublisherName;
@@ -199,7 +198,7 @@ namespace AdilBooks.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PublisherExists(id)) return NotFound(new { error = "NotFound", message = "Publisher not found." });
+                if (!PublisherExists(PublisherId)) return NotFound(new { error = "NotFound", message = "Publisher not found." });
                 throw;
             }
             catch
@@ -211,7 +210,7 @@ namespace AdilBooks.Controllers
         /// <summary>
         /// Deletes a specific publisher by their ID.
         /// </summary>
-        /// <param name="id">The ID of the publisher to delete.</param>
+        /// <param name=PublisherId">The ID of the publisher to delete.</param>
         /// <returns>200 OK with a success message, or an error message if something goes wrong.</returns>
         /// <example>
         /// DELETE: api/Publishers/Delete/1
@@ -227,12 +226,12 @@ namespace AdilBooks.Controllers
         ///     "message": "Publisher not found."
         /// }
         /// </example>
-        [HttpDelete("Delete/{id}")]
-        public async Task<IActionResult> DeletePublisher(int id)
+        [HttpDelete("Delete/{PublisherId}")]
+        public async Task<IActionResult> DeletePublisher(int PublisherId)
         {
             try
             {
-                var publisher = await _context.Publishers.FindAsync(id);
+                var publisher = await _context.Publishers.FindAsync(PublisherId);
                 if (publisher == null) return NotFound(new { error = "NotFound", message = "Publisher not found." });
 
                 _context.Publishers.Remove(publisher);
@@ -249,7 +248,7 @@ namespace AdilBooks.Controllers
         /// <summary>
         /// Retrieves all books associated with a specific publisher.
         /// </summary>
-        /// <param name="id">The ID of the publisher whose books are to be retrieved.</param>
+        /// <param name="PublisherId">The ID of the publisher whose books are to be retrieved.</param>
         /// <returns>200 OK with a list of GetBooksDto objects, or an error message if something goes wrong.</returns>
         /// <example>
         /// GET: api/Publishers/GetBooks/1
@@ -268,14 +267,14 @@ namespace AdilBooks.Controllers
         ///     "message": "Publisher not found."
         /// }
         /// </example>
-        [HttpGet("GetBooks/{id}")]
-        public async Task<ActionResult> GetBooksByPublisher(int id)
+        [HttpGet("ListBooksByPublisher/{PublisherId}")]
+        public async Task<ActionResult> GetBooksByPublisher(int PublisherId)
         {
             try
             {
                 var publisher = await _context.Publishers
                     .Include(p => p.Books)
-                    .FirstOrDefaultAsync(p => p.PublisherId == id);
+                    .FirstOrDefaultAsync(p => p.PublisherId == PublisherId);
 
                 if (publisher == null) return NotFound(new { error = "NotFound", message = "Publisher not found." });
 
@@ -298,11 +297,11 @@ namespace AdilBooks.Controllers
         /// <summary>
         /// Checks if a publisher exists by their ID.
         /// </summary>
-        /// <param name="id">The ID of the publisher to check.</param>
+        /// <param name="PublisherId">The ID of the publisher to check.</param>
         /// <returns>True if the publisher exists, otherwise false.</returns>
-        private bool PublisherExists(int id)
+        private bool PublisherExists(int PublisherId)
         {
-            return _context.Publishers.Any(p => p.PublisherId == id);
+            return _context.Publishers.Any(p => p.PublisherId == PublisherId);
         }
     }
 }

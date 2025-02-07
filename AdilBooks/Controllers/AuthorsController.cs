@@ -5,7 +5,7 @@ using AdilBooks.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 namespace AdilBooks.Controllers
 {
     [Route("api/[controller]")]
@@ -23,7 +23,24 @@ namespace AdilBooks.Controllers
         /// <summary>
         /// Retrieves a list of all authors.
         /// </summary>
-        /// <returns>A list of authors.</returns>
+        /// <returns>200 OK with a list of authors, or an error message if something goes wrong.</returns>
+        /// <example>
+        /// GET: api/Authors/List
+        /// Success Example:
+        /// {
+        ///     "message": "Authors retrieved successfully.",
+        ///     "data": [
+        ///         { "authorId": 1, "name": "Author One" },
+        ///         { "authorId": 2, "name": "Author Two" }
+        ///     ]
+        /// }
+        /// 
+        /// Error Example:
+        /// {
+        ///     "error": "InternalServerError",
+        ///     "message": "An error occurred while retrieving authors."
+        /// }
+        /// </example>
         [HttpGet("List")]
         public async Task<ActionResult> ListAuthors()
         {
@@ -40,7 +57,7 @@ namespace AdilBooks.Controllers
             }
             catch
             {
-                return StatusCode(500, "An error occurred while retrieving authors.");
+                return StatusCode(500, new { error = "InternalServerError", message = "An error occurred while retrieving authors." });
             }
         }
 
@@ -48,18 +65,37 @@ namespace AdilBooks.Controllers
         /// <summary>
         /// Retrieves details of a specific author by their ID.
         /// </summary>
-        /// <param name="id">The ID of the author to retrieve.</param>
-        /// <returns>Details of the specified author.</returns>
-        [HttpGet("Find/{id}")]
-        public async Task<ActionResult> FindAuthor(int id)
+        /// <param name="AuthorId">The ID of the author to retrieve.</param>
+        /// <returns>200 OK with the author's details, or 404 Not Found if the author is not found.</returns>
+        /// <example>
+        /// GET: api/Authors/Find/1
+        /// Success Example:
+        /// {
+        ///     "message": "Author retrieved successfully.",
+        ///     "data": {
+        ///         "authorId": 1,
+        ///         "name": "Author One",
+        ///         "bio": "Author biography",
+        ///         "titles": "Book One, Book Two"
+        ///     }
+        /// }
+        /// 
+        /// Error Example:
+        /// {
+        ///     "error": "NotFound",
+        ///     "message": "Author not found."
+        /// }
+        /// </example>
+        [HttpGet("Find/{AuthorId}")]
+        public async Task<ActionResult> FindAuthor(int AuthorId)
         {
             try
             {
                 var author = await _context.Authors
                     .Include(a => a.Books)
-                    .FirstOrDefaultAsync(a => a.AuthorId == id);
+                    .FirstOrDefaultAsync(a => a.AuthorId == AuthorId);
 
-                if (author == null) return NotFound(new { message = "Author not found." });
+                if (author == null) return NotFound(new { error = "NotFound", message = "Author not found." });
 
                 var authorDto = new AuthorDto
                 {
@@ -73,7 +109,7 @@ namespace AdilBooks.Controllers
             }
             catch
             {
-                return StatusCode(500, "An error occurred while retrieving the author.");
+                return StatusCode(500, new { error = "InternalServerError", message = "An error occurred while retrieving the author." });
             }
         }
 
@@ -82,7 +118,32 @@ namespace AdilBooks.Controllers
         /// Adds a new author to the database.
         /// </summary>
         /// <param name="authorDto">The details of the author to add.</param>
-        /// <returns>The newly added author.</returns>
+        /// <returns>201 Created with the added author's details, or an error message if something goes wrong.</returns>
+        /// <example>
+        /// POST: api/Authors/Add
+        /// Input:
+        /// {
+        ///     "name": "New Author",
+        ///     "bio": "Bio of the new author"
+        /// }
+        ///
+        /// Success Example:
+        /// {
+        ///     "message": "Author added successfully.",
+        ///     "data": {
+        ///         "authorId": 5,
+        ///         "name": "New Author",
+        ///         "bio": "Bio of the new author",
+        ///         "titles": ""
+        ///     }
+        /// }
+        /// 
+        /// Error Example:
+        /// {
+        ///     "error": "InternalServerError",
+        ///     "message": "An error occurred while adding the author."
+        /// }
+        /// </example>
         [HttpPost("Add")]
         public async Task<ActionResult> AddAuthor(AuthorDto authorDto)
         {
@@ -102,7 +163,7 @@ namespace AdilBooks.Controllers
             }
             catch
             {
-                return StatusCode(500, "An error occurred while adding the author.");
+                return StatusCode(500, new { error = "InternalServerError", message = "An error occurred while adding the author." });
             }
         }
 
@@ -110,18 +171,38 @@ namespace AdilBooks.Controllers
         /// <summary>
         /// Updates an existing author's details.
         /// </summary>
-        /// <param name="id">The ID of the author to update.</param>
+        /// <param name="AuthorId">The ID of the author to update.</param>
         /// <param name="authorDto">The updated details of the author.</param>
-        /// <returns>No content on successful update.</returns>
-        [HttpPut("Update/{id}")]
-        public async Task<IActionResult> UpdateAuthor(int id, AuthorDto authorDto)
+        /// <returns>200 OK if the update is successful, or an error message if something goes wrong.</returns>
+        /// <example>
+        /// PUT: api/Authors/Update/1
+        /// Input:
+        /// {
+        ///     "authorId": 1,
+        ///     "name": "Updated Author",
+        ///     "bio": "Updated biography"
+        /// }
+        ///
+        /// Success Example:
+        /// {
+        ///     "message": "Author updated successfully."
+        /// }
+        ///
+        /// Error Example:
+        /// {
+        ///     "error": "NotFound",
+        ///     "message": "Author not found."
+        /// }
+        /// </example>
+        [HttpPut("Update/{AuthorId}")]
+        public async Task<IActionResult> UpdateAuthor(int AuthorId, AuthorDto authorDto)
         {
-            if (id != authorDto.AuthorId) return BadRequest(new { message = "Author ID mismatch." });
+            if (AuthorId != authorDto.AuthorId) return BadRequest(new { error = "BadRequest", message = "Author ID mismatch." });
 
             try
             {
-                var author = await _context.Authors.FindAsync(id);
-                if (author == null) return NotFound(new { message = "Author not found." });
+                var author = await _context.Authors.FindAsync(AuthorId);
+                if (author == null) return NotFound(new { error = "NotFound", message = "Author not found." });
 
                 author.Name = authorDto.Name;
                 author.Bio = authorDto.Bio;
@@ -133,12 +214,12 @@ namespace AdilBooks.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AuthorExists(id)) return NotFound(new { message = "Author not found." });
+                if (!AuthorExists(AuthorId)) return NotFound(new { error = "NotFound", message = "Author not found." });
                 throw;
             }
             catch
             {
-                return StatusCode(500, "An error occurred while updating the author.");
+                return StatusCode(500, new { error = "InternalServerError", message = "An error occurred while updating the author." });
             }
         }
 
@@ -146,15 +227,29 @@ namespace AdilBooks.Controllers
         /// <summary>
         /// Deletes a specific author by their ID.
         /// </summary>
-        /// <param name="id">The ID of the author to delete.</param>
-        /// <returns>No content on successful deletion.</returns>
+        /// <param name="AuthorId">The ID of the author to delete.</param>
+        /// <returns>200 OK if the deletion is successful, or an error message if something goes wrong.</returns>
+        /// <example>
+        /// DELETE: api/Authors/Delete/1
+        ///
+        /// Success Example:
+        /// {
+        ///     "message": "Author deleted successfully."
+        /// }
+        ///
+        /// Error Example:
+        /// {
+        ///     "error": "NotFound",
+        ///     "message": "Author not found."
+        /// }
+        /// </example>
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteAuthor(int id)
         {
             try
             {
                 var author = await _context.Authors.FindAsync(id);
-                if (author == null) return NotFound(new { message = "Author not found." });
+                if (author == null) return NotFound(new { error = "NotFound", message = "Author not found." });
 
                 _context.Authors.Remove(author);
                 await _context.SaveChangesAsync();
@@ -163,7 +258,7 @@ namespace AdilBooks.Controllers
             }
             catch
             {
-                return StatusCode(500, "An error occurred while deleting the author.");
+                return StatusCode(500, new { error = "InternalServerError", message = "An error occurred while deleting the author." });
             }
         }
 
@@ -171,20 +266,44 @@ namespace AdilBooks.Controllers
         /// <summary>
         /// Retrieves all books associated with a specific author.
         /// </summary>
-        /// <param name="id">The ID of the author whose books are to be retrieved.</param>
-        /// <returns>200 OK with a list of books, or 404 Not Found if the author or books are not found.</returns>
-        [HttpGet("GetBooks/{id}")]
-        public async Task<ActionResult> GetBooksForAuthor(int id)
+        /// <param name="AuthorId">The ID of the author whose books are to be retrieved.</param>
+        /// <returns>200 OK with a list of books, or an error message if something goes wrong.</returns>
+        /// <example>
+        /// GET: api/Authors/GetBooks/1
+        ///
+        /// Success Example:
+        /// {
+        ///     "message": "Books retrieved successfully.",
+        ///     "data": [
+        ///         { "title": "Book One", "year": 2020 },
+        ///         { "title": "Book Two", "year": 2021 }
+        ///     ]
+        /// }
+        ///
+        /// Error Example:
+        /// {
+        ///     "error": "NotFound",
+        ///     "message": "Author not found."
+        /// }
+        /// </example>
+        [HttpGet("ListBooksByAuthor/{AuthorId}")]
+        public async Task<ActionResult> GetBooksForAuthor(int AuthorId)
         {
             try
             {
                 var author = await _context.Authors
                     .Include(a => a.Books)
-                    .FirstOrDefaultAsync(a => a.AuthorId == id);
+                    .FirstOrDefaultAsync(a => a.AuthorId == AuthorId);
 
-                if (author == null) return NotFound(new { message = "Author not found." });
+                if (author == null)
+                {
+                    return NotFound(new { error = "NotFound", message = "Author not found." });
+                }
 
-                if (author.Books == null || !author.Books.Any()) return NotFound(new { message = "No books found for this author." });
+                if (author.Books == null || !author.Books.Any())
+                {
+                    return NotFound(new { error = "NotFound", message = "No books found for this author." });
+                }
 
                 var booksDto = author.Books.Select(book => new GetBooksDto
                 {
@@ -196,14 +315,14 @@ namespace AdilBooks.Controllers
             }
             catch
             {
-                return StatusCode(500, "An error occurred while retrieving books for the author.");
+                return StatusCode(500, new { error = "InternalServerError", message = "An error occurred while retrieving books for the author." });
             }
         }
 
         // Helper method to check if an author exists
-        private bool AuthorExists(int id)
+        private bool AuthorExists(int AuthorId)
         {
-            return _context.Authors.Any(a => a.AuthorId == id);
+            return _context.Authors.Any(a => a.AuthorId == AuthorId);
         }
     }
 }

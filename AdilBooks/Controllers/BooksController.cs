@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AdilBooks.Data;
 using AdilBooks.Models;
+using System.Net;
 
 namespace AdilBooks.Controllers
 {
@@ -71,11 +72,11 @@ namespace AdilBooks.Controllers
         }
 
         // GET: api/Books/5
-        [HttpGet(template: "Find/{id}")]
+        [HttpGet(template: "Find/{BookId}")]
         /// <summary>
         /// Retrieves details of a specific book by ID.
         /// </summary>
-        /// <param name="id">The ID of the book to retrieve.</param>
+        /// <param name="BookId">The ID of the book to retrieve.</param>
         /// <returns>200 OK with the book details or an error message if the book is not found.</returns>
         /// <example>
         /// GET: api/Books/Find/1
@@ -99,18 +100,18 @@ namespace AdilBooks.Controllers
         ///     "message": "Book with ID 1 not found."
         /// }
         /// </example>
-        public async Task<ActionResult<BookDto>> FindBook(int id)
+        public async Task<ActionResult<BookDto>> FindBook(int BookId)
         {
             try
             {
                 var book = await _context.Books
                     .Include(b => b.Authors)
                     .Include(b => b.Publisher)
-                    .FirstOrDefaultAsync(b => b.BookId == id);
+                    .FirstOrDefaultAsync(b => b.BookId == BookId);
 
                 if (book == null)
                 {
-                    return NotFound(new { error = "NotFound", message = $"Book with ID {id} not found." });
+                    return NotFound(new { error = "NotFound", message = $"Book with ID {BookId} not found." });
                 }
 
                 var bookDto = new BookDto
@@ -132,11 +133,11 @@ namespace AdilBooks.Controllers
         }
 
         // PUT: api/Books/5
-        [HttpPut("Update/{id}")]
+        [HttpPut("Update/{BookId}")]
         /// <summary>
         /// Updates an existing book.
         /// </summary>
-        /// <param name="id">The ID of the book to update.</param>
+        /// <param name="BookId">The ID of the book to update.</param>
         /// <param name="updateBookDto">The updated book details.</param>
         /// <returns>200 OK if the book is updated successfully, or an error message if something goes wrong.</returns>
         /// <example>
@@ -169,19 +170,24 @@ namespace AdilBooks.Controllers
         ///     "message": "The book was updated by another user. Please refresh and try again."
         /// }
         /// </example>
-        public async Task<IActionResult> UpdateBook(int id, UpdateBookDto updateBookDto)
+        public async Task<IActionResult> UpdateBook(int BookId, UpdateBookDto updateBookDto)
         {
-            if (id != updateBookDto.BookId)
+            if (updateBookDto == null)
+            {
+                return BadRequest(new { error = "InvalidRequest", message = "The book details cannot be null." });
+            }
+
+            if (BookId != updateBookDto.BookId)
             {
                 return BadRequest(new { error = "InvalidRequest", message = "The provided ID does not match the book ID." });
             }
 
             try
             {
-                var book = await _context.Books.FirstOrDefaultAsync(b => b.BookId == id);
+                var book = await _context.Books.FirstOrDefaultAsync(b => b.BookId == BookId);
                 if (book == null)
                 {
-                    return NotFound(new { error = "NotFound", message = $"Book with ID {id} not found." });
+                    return NotFound(new { error = "NotFound", message = $"Book with ID {BookId} not found." });
                 }
 
                 book.Title = updateBookDto.Title;
@@ -293,11 +299,11 @@ namespace AdilBooks.Controllers
         }
 
         // DELETE: api/Books/5
-        [HttpDelete(template: "Delete/{id}")]
+        [HttpDelete(template: "Delete/{BookId}")]
         /// <summary>
         /// Deletes a book by ID.
         /// </summary>
-        /// <param name="id">The ID of the book to delete.</param>
+        /// <param name="BookId">The ID of the book to delete.</param>
         /// <returns>200 OK if the book is deleted successfully, or an error message if the book is not found.</returns>
         /// <example>
         /// DELETE: api/Books/Delete/1
@@ -313,14 +319,14 @@ namespace AdilBooks.Controllers
         ///     "message": "Book with ID 1 not found."
         /// }
         /// </example>
-        public async Task<IActionResult> DeleteBook(int id)
+        public async Task<IActionResult> DeleteBook(int BookId)
         {
             try
             {
-                var book = await _context.Books.FindAsync(id);
+                var book = await _context.Books.FindAsync(BookId);
                 if (book == null)
                 {
-                    return NotFound(new { error = "NotFound", message = $"Book with ID {id} not found." });
+                    return NotFound(new { error = "NotFound", message = $"Book with ID {BookId} not found." });
                 }
 
                 _context.Books.Remove(book);
@@ -333,45 +339,45 @@ namespace AdilBooks.Controllers
                 return StatusCode(500, new { error = "InternalServerError", message = "An error occurred while deleting the book." });
             }
         }
-        [HttpPost("LinkAuthorToBook/{AuthorId}/{BookId}")]
-        /// <summary>
-        /// Links an author to a specific book.
-        /// </summary>
-        /// <param name="AuthorId">The ID of the author to link.</param>
-        /// <param name="BookId">The ID of the book to link to.</param>
-        /// <returns>200 OK if linked successfully, or an error message if something goes wrong.</returns>
-        /// <example>
-        /// POST: api/Books/LinkAuthorToBook/1/5
-        /// Output:
-        /// {
-        ///     "message": "Author linked to book successfully."
-        /// }
-        /// 
-        /// Error Scenarios:
-        /// - Book not found:
-        /// Output:
-        /// {
-        ///     "error": "NotFound",
-        ///     "message": "Book not found."
-        /// }
-        /// 
-        /// - Author not found:
-        /// Output:
-        /// {
-        ///     "error": "NotFound",
-        ///     "message": "Author not found."
-        /// }
-        /// </example>
-        public async Task<IActionResult> LinkAuthorToBook(int AuthorId, int BookId)
-        {
-            try
+            [HttpPost("LinkAuthorToBook/{AuthorId}/{BookId}")]
+            /// <summary>
+            /// Links an author to a specific book.
+            /// </summary>
+            /// <param name="AuthorId">The ID of the author to link.</param>
+            /// <param name="BookId">The ID of the book to link to.</param>
+            /// <returns>200 OK if linked successfully, or an error message if something goes wrong.</returns>
+            /// <example>
+            /// POST: api/Books/LinkAuthorToBook/1/5
+            /// Output:
+            /// {
+            ///     "message": "Author linked to book successfully."
+            /// }
+            /// 
+            /// Error Scenarios:
+            /// - Book not found:
+            /// Output:
+            /// {
+            ///     "error": "NotFound",
+            ///     "message": "Book not found."
+            /// }
+            /// 
+            /// - Author not found:
+            /// Output:
+            /// {
+            ///     "error": "NotFound",
+            ///     "message": "Author not found."
+            /// }
+            /// </example>
+            public async Task<IActionResult> LinkAuthorToBook(int AuthorId, int BookId)
             {
-                // Retrieve the book and author
-                var Book = await _context.Books
-                    .Include(b => b.Authors)  // Include the authors to modify the relationship
-                    .FirstOrDefaultAsync(b => b.BookId == BookId);
+                try
+                {
+                    // Retrieve the book and author
+                    var Book = await _context.Books
+                        .Include(b => b.Authors)  // Include the authors to modify the relationship
+                        .FirstOrDefaultAsync(b => b.BookId == BookId);
 
-                var Author = await _context.Authors.FindAsync(AuthorId);
+                    var Author = await _context.Authors.FindAsync(AuthorId);
 
                 // Check if the book or author exists
                 if (Book == null)
@@ -481,61 +487,44 @@ namespace AdilBooks.Controllers
                 return StatusCode(500, new { error = "InternalServerError", message = ex.Message });
             }
         }
-        [HttpGet("GetAuthors/{bookId}")]
-        /// POST: api/Books/Add
+        [HttpGet("ListAuthorsByBook/{bookId}")]
         /// <summary>
-        /// Adds a new book.
+        /// Lists all authors' names associated with a specific book.
         /// </summary>
-        /// <param name="addBookDto">The book details to add.</param>
-        /// <returns>201 Created if the book is added successfully, or an error message if something goes wrong.</returns>
+        /// <param name="bookId">The ID of the book to list authors for.</param>
+        /// <returns>200 OK with a list of author names, or an error message if something goes wrong.</returns>
         /// <example>
-        /// Success Example:
-        /// POST: api/Books/Add
-        /// Input:
-        /// {
-        ///     "title": "New Book",
-        ///     "year": 2023,
-        ///     "synopsis": "A new adventure begins.",
-        ///     "publisherId": 1,
-        ///     "authorIds": [1, 2]
-        /// }
+        /// GET: api/Books/ListAuthorsByBook/1
         ///
-        /// Output:
+        /// Success Example:
         /// {
-        ///     "message": "Book added successfully.",
-        ///     "data": {
-        ///         "bookId": 5,
-        ///         "title": "New Book",
-        ///         "year": 2023,
-        ///         "synopsis": "A new adventure begins.",
-        ///         "publisherName": "Test Publisher",
-        ///         "authorNames": ["Author One", "Author Two"]
-        ///     }
+        ///     "message": "Authors retrieved successfully.",
+        ///     "data": ["Author One", "Author Two"]
         /// }
         ///
         /// Error Scenarios:
-        /// 
-        /// - One or more authors not found:
-        /// Input:
-        /// {
-        ///     "title": "New Book",
-        ///     "year": 2023,
-        ///     "synopsis": "A new adventure begins.",
-        ///     "publisherId": 1,
-        ///     "authorIds": [1, 999]  // One author does not exist
-        /// }
         ///
+        /// - Book not found:
+        /// GET: api/Books/ListAuthorsByBook/999
         /// Output:
         /// {
         ///     "error": "NotFound",
-        ///     "message": "One or more authors were not found."
+        ///     "message": "Book with ID 999 not found."
+        /// }
+        ///
+        /// - No authors associated with the book:
+        /// GET: api/Books/ListAuthorsByBook/5  // Book exists but has no authors linked
+        /// Output:
+        /// {
+        ///     "error": "NotFound",
+        ///     "message": "No authors found for this book."
         /// }
         ///
         /// - Internal server error (unexpected exception):
         /// Output:
         /// {
         ///     "error": "InternalServerError",
-        ///     "message": "An error occurred while adding the book."
+        ///     "message": "An error occurred while retrieving authors for the book."
         /// }
         /// </example>
         public async Task<ActionResult> ListAuthorsByBook(int bookId)
@@ -569,11 +558,178 @@ namespace AdilBooks.Controllers
                 return StatusCode(500, new { error = "InternalServerError", message = "An error occurred while retrieving authors for the book." });
             }
         }
+        [HttpPost("AddMultiple")]
+        /// <summary>
+        /// Adds multiple books to the database in a single request.
+        /// </summary>
+        /// <param name="books">A list of books to be added.</param>
+        /// <returns>201 Created with details of successfully added books or error messages for failed additions.</returns>
+        /// <example>
+        /// **Success Example:**  
+        /// **POST:** api/Books/AddMultiple  
+        /// **Input:**  
+        /// ```json
+        /// [
+        ///     {
+        ///         "title": "Book 1",
+        ///         "year": 2023,
+        ///         "synopsis": "The first book in the series.",
+        ///         "publisherId": 1,
+        ///         "authorIds": [1, 2]
+        ///     },
+        ///     {
+        ///         "title": "Book 2",
+        ///         "year": 2022,
+        ///         "synopsis": "The second book in the series.",
+        ///         "publisherId": 2,
+        ///         "authorIds": [3]
+        ///     }
+        /// ]
+        /// ```
+        ///  
+        /// **Output:**  
+        /// ```json
+        /// [
+        ///     {
+        ///         "message": "Book added successfully.",
+        ///         "data": {
+        ///             "bookId": 5,
+        ///             "title": "Book 1",
+        ///             "year": 2023,
+        ///             "synopsis": "The first book in the series.",
+        ///             "publisherName": "Publisher One",
+        ///             "authorNames": ["Author One", "Author Two"]
+        ///         }
+        ///     },
+        ///     {
+        ///         "message": "Book added successfully.",
+        ///         "data": {
+        ///             "bookId": 6,
+        ///             "title": "Book 2",
+        ///             "year": 2022,
+        ///             "synopsis": "The second book in the series.",
+        ///             "publisherName": "Publisher Two",
+        ///             "authorNames": ["Author Three"]
+        ///         }
+        ///     }
+        /// ]
+        /// ```
+        ///  
+        /// **Error Scenarios:**  
+        ///  
+        /// - **Publisher Not Found:**  
+        /// **Input:**  
+        /// ```json
+        /// [
+        ///     {
+        ///         "title": "Book 3",
+        ///         "year": 2021,
+        ///         "synopsis": "Another book.",
+        ///         "publisherId": 999,  // Invalid publisher ID
+        ///         "authorIds": [1]
+        ///     }
+        /// ]
+        /// ```  
+        /// **Output:**  
+        /// ```json
+        /// {
+        ///     "error": "NotFound",
+        ///     "message": "Publisher with ID 999 not found."
+        /// }
+        /// ```  
+        ///  
+        /// - **One or More Authors Not Found:**  
+        /// **Input:**  
+        /// ```json
+        /// [
+        ///     {
+        ///         "title": "Book 4",
+        ///         "year": 2021,
+        ///         "synopsis": "A new adventure.",
+        ///         "publisherId": 1,
+        ///         "authorIds": [1, 999]  // One invalid author ID
+        ///     }
+        /// ]
+        /// ```  
+        /// **Output:**  
+        /// ```json
+        /// {
+        ///     "error": "NotFound",
+        ///     "message": "One or more authors were not found."
+        /// }
+        /// ```  
+        ///  
+        /// - **Internal Server Error:**  
+        /// **Output:**  
+        /// ```json
+        /// {
+        ///     "error": "InternalServerError",
+        ///     "message": "An error occurred while adding the book."
+        /// }
+        /// ```  
+        /// </example>
+        public async Task<ActionResult> AddMultipleBooks(List<AddBookDto> books)
+        {
+            var addedBooks = new List<object>();
 
+            foreach (var bookDto in books)
+            {
+                try
+                {
+                    // Check if the publisher exists
+                    var publisher = await _context.Publishers.FindAsync(bookDto.PublisherId);
+                    if (publisher == null)
+                    {
+                        return NotFound(new { error = "NotFound", message = $"Publisher with ID {bookDto.PublisherId} not found." });
+                    }
+
+                    // Check if authors exist
+                    var authors = await _context.Authors
+                        .Where(a => bookDto.AuthorIds.Contains(a.AuthorId))
+                        .ToListAsync();
+
+                    if (authors.Count != bookDto.AuthorIds.Count)
+                    {
+                        return NotFound(new { error = "NotFound", message = "One or more authors were not found." });
+                    }
+
+                    // Create the book entity
+                    var book = new Book
+                    {
+                        Title = bookDto.Title,
+                        Year = bookDto.Year,
+                        Synopsis = bookDto.Synopsis,
+                        PublisherId = bookDto.PublisherId,
+                        Authors = authors
+                    };
+
+                    // Add the book to the database
+                    _context.Books.Add(book);
+                    await _context.SaveChangesAsync();
+
+                    // Populate the response data
+                    bookDto.BookId = book.BookId;
+                    bookDto.PublisherName = publisher.PublisherName;
+                    bookDto.AuthorNames = authors.Select(a => a.Name).ToList();
+
+                    addedBooks.Add(new { message = "Book added successfully.", data = bookDto });
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, new { error = "InternalServerError", message = $"Error adding book '{bookDto.Title}': {ex.Message}" });
+                }
+            }
+
+            return Ok(addedBooks);
+        }
 
     }
 
 
 
-
 }
+
+
+
+
+
